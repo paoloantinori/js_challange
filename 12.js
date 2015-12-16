@@ -4,7 +4,7 @@ var f = '';
 f  = fs.readFileSync('input', 'utf8');
 var ff = f.split("\n");
 
-//ff = ["ab -1 sffsfs 2 sfsadfssfd 34 sfsdfsdfsfsd aaa    890  aaa"];
+//ff = ['[1,"red",5]'];
 //ff = ["abz"];
 //ff = ["toggle 0,0 through 0,1", "turn on 1,1 through 1,1"];//, "turn off 1,1 through 2,2", "toggle 0,0 through 2,2"];
 
@@ -12,13 +12,6 @@ var ff = f.split("\n");
 
 var ee = [];
 
-
-function recur(s){
-  var result = true;
-  if(typeof(s) == 'string'){
-    if( )
-  }
-}
 
 function red_in_object(s){
   for(var key in s){
@@ -30,36 +23,60 @@ function red_in_object(s){
 }
 
 function contains_directly_red(s){
-  if( (typeof(s) === 'object') && red_in_object(s) ){
+  if( (typeof(s) === 'object') && !(s instanceof Array) && red_in_object(s) ){
     return true;
   }
 }
 
+function visit(s){
+  console.log("visiting: " + s);
+  if(typeof(s) === 'number'){
+    console.log(s + " is a number");
+    ee.push(s);
+  } else if(s instanceof Array){
+    console.log(s + " is a array of length " + s.length);
+    for(var i = 0; i < s.length ; i++){
+      console.log("About to visit: " + s[i]);
+      visit(s[i]);
+    }
+  } else if(s instanceof Object){
+    console.log(s + " is an object");
+    var skip = false;
+    for(var i in s){
+      if(s[i] === "red"){
+        skip = true;
+      }
+    }
+    if(!skip){
+      for(var i in s){
+        visit(s[i]);
+      }
+    }
+
+  } else {
+    console.log("Doing nothing for " + s);
+  }
+}
 
 function read(s){
-
-
     var json = JSON.parse(s);
     console.log(json);
-    for( var i in json){
-      console.log(json[i]);
-      console.log("---------------------");
-    }
+    visit(json);
 
-
-
-
-
-  console.log("Input: " + s);
-  var expr = /([-0-9]+)/g;
-  var result = expr.exec(s);
-  while(result != null){
-    if(result != null){
-      console.log("regexp result " + result[1]);
-      ee.push(Number(result[1]));
-    }
-    result = expr.exec(s);
-  }
+  //
+  //
+  //
+  //
+  // console.log("Input: " + s);
+  // var expr = /([-0-9]+)/g;
+  // var result = expr.exec(s);
+  // while(result != null){
+  //   if(result != null){
+  //     console.log("regexp result " + result[1]);
+  //     ee.push(Number(result[1]));
+  //   }
+  //   result = expr.exec(s);
+  // }
 }
 
 function sum(s){
